@@ -1,5 +1,19 @@
 const jsdom = require("jsdom");
+const axios = require("axios");
 const { JSDOM } = jsdom;
+const crawlCurrentPage = async (currentURL) => {
+  console.log(currentURL);
+  try {
+    const response = await axios.get(currentURL);
+    if (response.headers["Cotent-Type"].includes("text/html")) {
+      console.log(getURLsFromHtml(response.data, currentURL));
+    }
+    return;
+  } catch (err) {
+    console.log(err);
+    console.log(`Error Occured : ${err.message}`);
+  }
+};
 const getURLsFromHtml = function (htmlBody, baseURL) {
   const urls = [];
   const dom = new JSDOM(htmlBody, {
@@ -24,4 +38,5 @@ const normalizeUrl = function (urlString) {
 module.exports = {
   normalizeUrl,
   getURLsFromHtml,
+  crawlCurrentPage,
 };

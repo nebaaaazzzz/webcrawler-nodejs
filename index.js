@@ -6,9 +6,10 @@ async function main() {
     process.exit(1);
   }
   console.log("crawler starting....".green);
-  const baseUrl = process.argv[2];
-  const pages = crawlCurrentPage(baseUrl, baseUrl, {});
-  console.log(await pages);
+  // const baseUrl = process.argv[2];
+  const baseUrl = "https://google.com";
+  const pages = await crawlCurrentPage(baseUrl, baseUrl, {});
+  console.log(pages);
 }
 
 main();

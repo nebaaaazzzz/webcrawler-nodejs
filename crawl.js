@@ -1,8 +1,8 @@
 const jsdom = require("jsdom");
 const axios = require("axios");
 const { JSDOM } = jsdom;
-const crawlCurrentPage = async (baseUrl, currentURL, pages) => {
-  const baseURLObj = new URL(baseUrl);
+async function crawlCurrentPage(baseURL, currentURL, pages) {
+  const baseURLObj = new URL(baseURL);
   const currentURLObj = new URL(currentURL);
   if (baseURLObj.hostname != currentURLObj.hostname) {
     return pages;
@@ -19,16 +19,15 @@ const crawlCurrentPage = async (baseUrl, currentURL, pages) => {
     if (!response.headers["content-type"].includes("text/html")) {
       return;
     }
-    const nextUrls = getURLsFromHtml(response.data, baseUrl);
+    const nextUrls = getURLsFromHtml(response.data, baseURL);
     for (const nextUrl of nextUrls) {
-      pages = await crawlCurrentPage(baseUrl, nextUrl, pages);
+      pages = await crawlCurrentPage(baseURL, nextUrl, pages);
     }
   } catch (err) {
     console.log(`Error Occured : ${err.message}`);
   }
-
   return pages;
-};
+}
 const getURLsFromHtml = function (htmlBody, baseURL) {
   const urls = [];
   const dom = new JSDOM(htmlBody, {
